@@ -1,0 +1,127 @@
+
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7fb4b0405ac8
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7fd77d405ac8
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7fd1ad405ac8
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7f9739c05ac8
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7fa160c05ae8
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7f945fc04168
+size = -1
+capacity = 1
+
+canary3 = 0
+ [-1] = 0.00
+ [0] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7fa675c05a28
+size = -1
+capacity = 0
+
+canary3 = 0
+ [-1] = 0.00
+canary4 = BE31AB
+------------------------------------------
+
+------------------------------------------
+SIZE_LESS_ZERO
+CANARY3_DIED
+ERror_status = 132
+canary1 = BE31AB
+canary2 = BE31AB
+data = 0x7f94f6504088
+size = -1
+capacity = 0
+
+canary3 = 0
+ [-1] = 0.00
+canary4 = BE31AB
+------------------------------------------
