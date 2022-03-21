@@ -1,4 +1,4 @@
-#include "headerASM.h"
+#include "headerASM_3.0.h"
 
 int SizeOfFile(FILE* fp);
 void BufferText(FILE* fp, char*** lines, char** buffer, int size_of_file, int* nstr);
@@ -6,6 +6,7 @@ void BufferText(FILE* fp, char*** lines, char** buffer, int size_of_file, int* n
 void AsmFOut(char** lines, char* buffer, int nstr, int* code);
 int SyntaxAnalysis(char* line);
 int RegistrAnalysis(char* command);
+Label FindLabel();
 
 
 int main()
@@ -96,7 +97,6 @@ void BufferText(FILE* fp, char*** lines, char** buffer, int size_of_file, int* n
 
 }
 
-
 void AsmFOut(char** lines, char* buffer, int nstr, int* code)
 {
     FILE* outtxt = NULL;
@@ -109,95 +109,75 @@ void AsmFOut(char** lines, char* buffer, int nstr, int* code)
     int ip = 1;
 
     char command[5];
-    int  arg = 0;
+    int  argument = 0;
     char rarg[10] = " ";
-                                                  
-                                            
+
+    #define DEF_CMD(name, num, arg, ...)        \
+                                                 \
+    if(strcmp(command, #name) == 0)               \
+    {                                              \
+        if(arg == 0)                                \
+        {                                            \
+            code[ip++] = CMD_ ## name;                \
+                                                       \
+            fprintf(fdump, #name"\n");                  \
+        }                                                \
+        else if(arg == 1)                                 \
+        {                                                  \
+            if(SyntaxAnalysis(*lines) == NUMBER)            \
+            {                                                \
+                sscanf(*lines, "%*s %d", &argument);          \
+                                                               \
+                    code[ip++] = CMD_ ## name;                  \
+                    code[ip++]   = argument;                     \
+                                                                  \
+                    fprintf(fdump, #name " %d \n", argument);      \
+                                                                    \
+            }                                                        \
+            else if(SyntaxAnalysis(*lines) == REGISTR)                \
+            {                                                          \
+                sscanf(*lines, "%*s %s", rarg);                         \
+                                                                         \
+                    code[ip++] = CMD_ ## name + 1;                        \
+                    code[ip++] = RegistrAnalysis(rarg);                    \
+                                                                            \
+                    fprintf(fdump, #name " %d\n", RegistrAnalysis(rarg));    \
+                                                                              \
+            }                                                                  \
+        }                                                                       \
+    }                                                                            \
+    else                                                                          \
+    /*
+    struct Label* labels;
+    
+    #define DEF_JUMP(name, num, condition)              \
+                                                         \
+    if(strcmp(command, #name) == 0)                       \
+    {                                                      \
+        struct Label label = FindLabel(labels);             \
+        code[ip++] = JMP_ ## name;                           \
+        code[ip++] = label.pointer;                           \
+        fprintf(fdump, #name" %s\n", label.name_of_adr);       \
+    }                                                           \
+    else                                                         \
+    */
+
+
+
+
+
     for(int i = 0; i < nstr; i++)
     {   
         if(sscanf(*lines, "%s", command) == 1)
         {
-
-            if(strcmp(command, "push") == 0)
-            {   
-                if(SyntaxAnalysis(*lines) == NUMBER)
-                {
-                    sscanf(*lines, "%*s %d", &arg);
-
-                    code[ip++] = CMD_PUSH;
-                    code[ip++]   = arg;
-
-                    fprintf(fdump, "push %d\n", arg);
-                }
-                else if(SyntaxAnalysis(*lines) == REGISTR)
-                {   
-                    sscanf(*lines, "%*s %s", rarg);
-
-                    code[ip++] = CMD_RPUSH;
-                    code[ip++] = RegistrAnalysis(rarg);
-
-                    fprintf(fdump, "rpush %d\n", RegistrAnalysis(rarg));
-                }
-            }
-            if(strcmp(command, "mul") == 0)
+            #include "enum.h"
+            #undef DEF_CMD
             {
-                code[ip++] = CMD_MUL;
-
-                fprintf(fdump, "mul\n");
-            }
-            if(strcmp(command, "pop") == 0)
-            {   
-                if(SyntaxAnalysis(*lines) == REGISTR)
-                {   
-                    sscanf(*lines, "%*s %s", rarg);
-
-                    code[ip++] = CMD_RPOP;
-                    code[ip++] = RegistrAnalysis(rarg);
-
-                    fprintf(fdump, "rpop %d\n", RegistrAnalysis(rarg));
-                }
-                else 
-                {
-                    code[ip++] = CMD_POP;
-
-                    fprintf(fdump, "pop\n");
-                }
-            }
-            if(strcmp(command, "add") == 0)
-            {
-                code[ip++] = CMD_ADD;
-
-                fprintf(fdump, "add\n");
-            }
-            if(strcmp(command, "sub") == 0)
-            {
-                code[ip++] = CMD_SUB;
-
-                fprintf(fdump, "sub\n");
-            }
-            if(strcmp(command, "out") == 0)
-            {
-                code[ip++] = CMD_OUT;
-
-                fprintf(fdump, "out\n");
-            }
-            if(strcmp(command, "div") == 0)
-            {
-                code[ip++] = CMD_DIV;
-
-                fprintf(fdump, "div\n");
-            }
-            if(strcmp(command, "sqrt") == 0)
-            {
-                code[ip++] = CMD_SQRT;
-
-                fprintf(fdump, "sqrt\n");
+                printf("undentified command found\n");
+                exit(EXIT_FAILURE);
             }
         }
-
         (lines)++;
-
-
     }
 
     code[0] = ip;
@@ -207,7 +187,6 @@ void AsmFOut(char** lines, char* buffer, int nstr, int* code)
         fprintf(outtxt, "%d ", code[i]);
         printf("%d ", code[i]);
     }
-
 }
 
 int SyntaxAnalysis(char* line)
@@ -256,62 +235,8 @@ int RegistrAnalysis(char* command)
     }
 }
 
+Label FindLabel(Label* labels)
+{  
+    
 
-/*void AsmFDump(char** lines, char* buffer, int nstr) // убирать лишние пробелы до в строке и после нее
-{   
-    FILE* fdump = NULL;
-    fdump = fopen("CheckFile.txt", "w");
-
-    assert(fdump != NULL);
-
-    for(int i = 0; i < nstr; i++)
-    {
-
-        fprintf(fdump, "%s\n", *(lines + i));
-    }
-
-    fclose(fdump);
-}*/
-
-
-/*void AsmFOut(char*** lines, char** buffer, int nstr) // кринжово сделано - каждая команда на новой строке - на разных строках с аргументом
-{                                                    // спросить у Амадея как лучше сделать 
-    FILE* out = NULL;
-    out = fopen("MachineFile.txt", "w");
-
-    assert(out != NULL);
-    LOX;
-    for(int i = 0; i < nstr; i++)
-    {   
-        LOX;
-        if(strcmp(*(*lines), "push") == 0)
-        {   
-            (*lines)++;
-            i++;
-
-            fprintf(out, "%d%s", CMD_PUSH, **lines);
-            LOX;
-        }
-        (*lines)++;
-    }
-
-    fclose(out);
-}*/
-
-
-
-
-
-
-// работает с условным словом push для одного аргумента vv
-
-// если считывать в массив, то нужно выносить аргументы функций на отдельную строчку ??как??
-
-//KEK при добавлении пробела в выводе - норм, иначе цифры в порядке возрастания upd: не вроде норм
-
-//сделать список команд и их номера enum?
-//выводить два файла - для проца и для проверки -> 
-
-// большой if с командами и их номерами
-// синхронизовать с тетрадью
-
+}

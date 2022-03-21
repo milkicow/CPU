@@ -1,4 +1,4 @@
-#include "headerCPU.h"
+#include "headerCPU_3.0.h"
 
 int main()
 {   
@@ -21,92 +21,24 @@ int main()
 
     double value = 0;
 
+    #define DEF_CMD(name, number, arg, ...)     \
+                                                 \
+    case CMD_ ## name:                            \
+                                                   \
+    __VA_ARGS__                                     \
+                                                     \
+    processor.ip++;                                   \
+                                                       \
+    break;                                              \
+
 
     while(processor.ip < code_capacity)
     {   
 
         switch (processor.code[processor.ip])
         {
-        case CMD_PUSH:
-
-            LOX;
-
-            StackPush(&(processor.stk), processor.code[++processor.ip]);
-            processor.ip++;
-
-
-            break;
-
-        case CMD_RPUSH: //из регистра в стек
-            LOX;
-
-            StackPush(&(processor.stk), processor.registr[processor.code[++processor.ip]]);
-            processor.ip++;
-
-            break;
-
-        case CMD_MUL:
-            StackPush(&(processor.stk), StackPop(&(processor.stk)) * StackPop(&(processor.stk)));
-            processor.ip++;
-
-            break;
-        
-        case CMD_POP:
-            LOX;
-
-            StackPop(&(processor.stk));
-            processor.ip++;
-
-            break;
-
-        case CMD_RPOP: // из стека в регистр
-
-            processor.registr[processor.code[++processor.ip]] = StackPop(&(processor.stk));
-            
-            processor.ip++;
-
-            break;
-            
-        case CMD_ADD:
-            LOX;
-            value = StackPop(&(processor.stk));
-            StackPush(&(processor.stk), value + StackPop(&(processor.stk)));
-            processor.ip++;
-
-            break; 
-
-        case CMD_SUB:
-            LOX;
-            value = StackPop(&(processor.stk));
-            StackPush(&(processor.stk), StackPop(&(processor.stk)) - value);
-            processor.ip++;
-
-            break;
-
-        case CMD_OUT:
-            LOX;
-            value = StackPop(&(processor.stk));
-
-            printf("%lf", value);
-            processor.ip++;
-
-            break;
-
-        case CMD_DIV:
-            LOX;
-            value = StackPop(&(processor.stk));
-            StackPush(&(processor.stk), StackPop(&(processor.stk)) / value);
-            processor.ip++;
-
-            break; 
-
-        case CMD_SQRT:
-            LOX;
-            StackPush(&(processor.stk), sqrt(StackPop(&(processor.stk))));
-            processor.ip++;
-
-            break;
-
+            #include "enum.h"
+            #undef DEF_CMD
         default:
             LOX;
             printf("ERror_CMD = %d\n", processor.code[processor.ip]);
